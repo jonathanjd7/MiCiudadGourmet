@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Models\Dish;
+use App\Http\Requests\StoreDishRequest;
 
 class DishController extends Controller
 {
@@ -16,12 +19,6 @@ class DishController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    class DishController extends Controller
-{
-    /**
      * Crear un nuevo plato
      * 
      * @param StoreDishRequest $request
@@ -32,17 +29,17 @@ class DishController extends Controller
         try {
             // Crear plato con datos validados
             $dish = Dish::create($request->validated());
-            
+
             // Cargar relación con restaurante
             $dish->load('restaurant');
-            
+
             // Respuesta exitosa
             return response()->json([
                 'success' => true,
                 'message' => 'Plato creado exitosamente',
                 'data' => $dish
             ], 201);
-            
+
         } catch (\Exception $e) {
             // Respuesta de error
             return response()->json([
@@ -52,7 +49,7 @@ class DishController extends Controller
             ], 500);
         }
     }
-}
+
     /**
      * Display the specified resource.
      */
@@ -77,3 +74,4 @@ class DishController extends Controller
         //
     }
 }
+

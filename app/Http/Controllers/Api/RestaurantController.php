@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Models\Restaurant;
+use App\Http\Requests\StoreRestaurantRequest;
 
 class RestaurantController extends Controller
 {
@@ -18,20 +21,18 @@ class RestaurantController extends Controller
     /**
      * Store a newly created resource in storage.
      */
- 
     public function store(StoreRestaurantRequest $request): JsonResponse
     {
         try {
             // Crear restaurante con datos validados
             $restaurant = Restaurant::create($request->validated());
-            
+
             // Respuesta exitosa
             return response()->json([
                 'success' => true,
                 'message' => 'Restaurante creado exitosamente',
                 'data' => $restaurant
             ], 201);
-            
         } catch (\Exception $e) {
             // Respuesta de error
             return response()->json([
@@ -41,7 +42,6 @@ class RestaurantController extends Controller
             ], 500);
         }
     }
-}
 
     /**
      * Display the specified resource.
@@ -67,3 +67,4 @@ class RestaurantController extends Controller
         //
     }
 }
+
