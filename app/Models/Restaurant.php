@@ -105,3 +105,33 @@ class Restaurant extends Model
         return $this->belongsToMany(User::class, 'favorites');
     }
 }
+
+ /**
+     * Scope para filtrar solo restaurantes activos
+     * Uso: Restaurant::active()->get()
+     */
+    public function scopeActive($query)
+    {
+        // Filtra solo restaurantes con status = 'active'
+        return $query->where('status', 'active');
+    }
+
+    /**
+     * Scope para filtrar restaurantes por usuario
+     * Uso: Restaurant::byUser($userId)->get()
+     */
+    public function scopeByUser($query, $userId)
+    {
+        // Filtra restaurantes por ID de usuario
+        return $query->where('user_id', $userId);
+    }
+
+    /**
+     * Scope para buscar restaurantes por nombre
+     * Uso: Restaurant::searchByName('Pizza')->get()
+     */
+    public function scopeSearchByName($query, $name)
+    {
+        // Busca restaurantes que contengan el nombre
+        return $query->where('name', 'LIKE', '%' . $name . '%');
+    }
