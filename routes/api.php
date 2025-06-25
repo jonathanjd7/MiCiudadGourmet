@@ -11,71 +11,63 @@ use App\Http\Controllers\Api\UserController;
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
-|
-| Aquí registras las rutas de tu API. Se agrupan por autenticación.
-|
+| Aquí defines todas las rutas de tu API.
+| Separadas por acceso público y autenticado.
 */
 
 // ============================================================================
-// RUTAS PÚBLICAS (SIN AUTENTICACIÓN)
+// RUTAS PÚBLICAS (NO requieren token)
 // ============================================================================
+Route::post('/auth/register', [AuthController::class, 'register']);  // Registro de usuarios
+Route::post('/auth/login', [AuthController::class, 'login']);        // Login de usuarios
 
-// Registro e inicio de sesión
-Route::post('/auth/register', [AuthController::class, 'register']);
-Route::post('/auth/login', [AuthController::class, 'login']);
-
-// Acceso público a restaurantes
-Route::get('/public/restaurants', [RestaurantController::class, 'publicIndex']);
-Route::get('/public/restaurants/{restaurant}', [RestaurantController::class, 'publicShow']);
+Route::get('/public/restaurants', [RestaurantController::class, 'publicIndex']);   // Listar restaurantes públicos
+Route::get('/public/restaurants/{restaurant}', [RestaurantController::class, 'publicShow']); // Ver restaurante público
 
 // ============================================================================
-// RUTAS PROTEGIDAS (CON TOKEN SANCTUM)
+// RUTAS PROTEGIDAS (Requieren token Sanctum)
 // ============================================================================
-
 Route::middleware('auth:sanctum')->group(function () {
 
-    // -----------------------------------------
+    // -------------------------
     // Autenticación
-    // -----------------------------------------
-    Route::post('/auth/logout', [AuthController::class, 'logout']);
-    Route::get('/auth/me', [AuthController::class, 'me']);
+    // -------------------------
+    Route::post('/auth/logout', [AuthController::class, 'logout']);  // Cerrar sesión
+    Route::get('/auth/me', [AuthController::class, 'me']);           // Obtener datos del usuario autenticado
 
-    // -----------------------------------------
-    // Gestión de usuarios
-    // -----------------------------------------
-    Route::get('/users', [UserController::class, 'index']);
-    Route::post('/users', [UserController::class, 'store']);
-    Route::get('/users/{user}', [UserController::class, 'show']);
-    Route::put('/users/{user}', [UserController::class, 'update']);
-    Route::patch('/users/{user}', [UserController::class, 'update']);
-    Route::delete('/users/{user}', [UserController::class, 'destroy']);
+    // -------------------------
+    // Usuarios
+    // -------------------------
+    Route::get('/users', [UserController::class, 'index']);          // Listar usuarios
+    Route::post('/users', [UserController::class, 'store']);         // Crear usuario
+    Route::get('/users/{user}', [UserController::class, 'show']);    // Ver usuario
+    Route::match(['put', 'patch'], '/users/{user}', [UserController::class, 'update']); // Actualizar usuario
+    Route::delete('/users/{user}', [UserController::class, 'destroy']); // Eliminar usuario
 
-    // -----------------------------------------
-    // Gestión de restaurantes
-    // -----------------------------------------
-    Route::get('/restaurants', [RestaurantController::class, 'index']);
-    Route::post('/restaurants', [RestaurantController::class, 'store']);
-    Route::get('/restaurants/{restaurant}', [RestaurantController::class, 'show']);
-    Route::put('/restaurants/{restaurant}', [RestaurantController::class, 'update']);
-    Route::patch('/restaurants/{restaurant}', [RestaurantController::class, 'update']);
-    Route::delete('/restaurants/{restaurant}', [RestaurantController::class, 'destroy']);
+    // -------------------------
+    // Restaurantes
+    // -------------------------
+    Route::get('/restaurants', [RestaurantController::class, 'index']);    // Listar restaurantes (admin)
+    Route::post('/restaurants', [RestaurantController::class, 'store']);   // Crear restaurante
+    Route::get('/restaurants/{restaurant}', [RestaurantController::class, 'show']); // Ver restaurante
+    Route::match(['put', 'patch'], '/restaurants/{restaurant}', [RestaurantController::class, 'update']); // Actualizar restaurante
+    Route::delete('/restaurants/{restaurant}', [RestaurantController::class, 'destroy']); // Eliminar restaurante
 
-    // Platos por restaurante
+    // Platos de un restaurante específico
     Route::get('/restaurants/{restaurant}/dishes', [RestaurantController::class, 'dishes']);
 
-    // -----------------------------------------
-    // Gestión de platos
-    // -----------------------------------------
-    Route::get('/dishes', [DishController::class, 'index']);
-    Route::post('/dishes', [DishController::class, 'store']);
-    Route::get('/dishes/{dish}', [DishController::class, 'show']);
-    Route::put('/dishes/{dish}', [DishController::class, 'update']);
-    Route::patch('/dishes/{dish}', [DishController::class, 'update']);
-    Route::delete('/dishes/{dish}', [DishController::class, 'destroy']);
+    // -------------------------
+    // Platos
+    // -------------------------
+    Route::get('/dishes', [DishController::class, 'index']);         // Listar platos
+    Route::post('/dishes', [DishController::class, 'store']);        // Crear plato
+    Route::get('/dishes/{dish}', [DishController::class, 'show']);   // Ver plato
+    Route::match(['put', 'patch'], '/dishes/{dish}', [DishController::class, 'update']); // Actualizar plato
+    Route::delete('/dishes/{dish}', [DishController::class, 'destroy']); // Eliminar plato
 
-    // -----------------------------------------
-    // Ruta por defecto de Laravel (mantener)
-    // -----------------------------------------
+    // -------------------------
+    // Ruta por defecto de Laravel (puedes eliminar si no la usas)
+    // -------------------------
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
