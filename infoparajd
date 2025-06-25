@@ -1,0 +1,43 @@
+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  --> contraseña de GitHub para entrar en el git y hacer push por ejemplo luego de poner la contraseña.
+
+AREA 3: Modelos Eloquent voy por aquí.
+
+
+
+-- Crear usuario con contraseña
+CREATE USER 'laravel'@'localhost' IDENTIFIED BY 'danilo';
+
+-- Otorgar todos los privilegios en la base de datos
+GRANT ALL PRIVILEGES ON miciudadgourmet.* TO 'laravel'@'localhost';
+
+-- Aplicar los cambios
+FLUSH PRIVILEGES;
+
+-- Verificar que el usuario fue creado
+SELECT User, Host FROM mysql.user WHERE User = 'laravel';
+
+
+
+
+mysqldump -u root -p restaurant_directory > mi_ciudad_gourmet_backup.sql
+
+
+
+
+
+<VirtualHost *:80>
+    ServerName 18.212.36.50       # O usa tu IP pública si no tienes dominio
+    DocumentRoot /var/www/MiCiudadGourmet/public
+
+    <Directory /var/www/MiCiudadGourmet/public>
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/MiCiudadGourmet_error.log
+    CustomLog ${APACHE_LOG_DIR}/MiCiudadGourmet_access.log combined
+</VirtualHost>
+
+
+nano resources/views/welcome.blade.php para 
+
